@@ -150,16 +150,16 @@ figure,surf(doppler_axis,range_axis,RDM);
 
 % *%TODO* :
 %Select the number of Training Cells in both the dimensions.
-Tr = 10;
+Tr = 12;
 Td = 8;
 % *%TODO* :
 %Select the number of Guard Cells in both dimensions around the Cell under 
 %test (CUT) for accurate estimation
-Gr = 6;
-Gd = 3;
+Gr = 4;
+Gd = 4;
 % *%TODO* :
 % offset the threshold by SNR value in dB
-offset = 8;
+offset = 1.2;
 % *%TODO* :
 %Create a vector to store noise_level for each iteration on training cells
 noise_level = zeros(1,1);
@@ -203,7 +203,7 @@ for i = Tr+Gr+1:(Nr/2)-(Gr+Tr)
         else
             RDM(i,j) = 1;
         end
-        
+
     end
 end
 
@@ -216,18 +216,14 @@ fprintf("Checkpoint 2 Reached");
 %matrix. Hence,few cells will not be thresholded. To keep the map size same
 % set those values to 0. 
  
-
-
-
-
-
-
-
+[lr, lc] = size(RDM);
+RDM(union(1:(Tr+Gr), lr-(Tr+Gr-1):lr), :) = 0;  % rows
+RDM(:, union(1:(Td+Gd), lc-(Td+Gd-1):lc)) = 0;  % columns 
 
 % *%TODO* :
 %display the CFAR output using the Surf function like we did for Range
 %Doppler Response output.
-figure,surf(doppler_axis,range_axis,'replace this with output');
+figure,surf(doppler_axis,range_axis,RDM);
 colorbar;
 
 
